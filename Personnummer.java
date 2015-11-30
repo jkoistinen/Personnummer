@@ -3,6 +3,7 @@ import java.time.LocalDate;
 import java.time.DateTimeException;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
+
 /*
 Kontrollsiffran
 Sista siffran i personnumret är en kontrollsiffra. Den räknas ut maskinellt med ledning av födelsetiden och födelsenumret.
@@ -11,9 +12,20 @@ Här följer ett exempel på hur man kan räkna fram kontrollsiffran (enligt den
 
 1. Siffrorna i födelsetiden och födelsenumret multipliceras växelvis med 2 och 1.
 
+640823-3234
 6 4 0 8 2 3 – 3 2 3
 2 1 2 1 2 1    2 1 2
 12,4,0,8,4,3, 6,2,6
+
+8 5 0 3 1 1 - 0 1 5
+2 1 2 1 2 1   2 1 2
+16,5,0,3,2,1,0,1,10 = 38
+
+8 4 1 1 2 0 - 1 4 2 2
+2 1 2 1 2 1   2 1 2
+
+
+
 
 2. Lägg ihop siffrorna i produkterna. Obs! 12 räknas som 1+2
 1+2+4+0+8+4+3+6+2+6=36
@@ -65,17 +77,34 @@ Restsiffran (4) blir kontrollsiffra vilket gör att personnumret i exemplet blir
     }
 
   public static boolean isControlNumberValid(String input) {
+    //int inputLastNumber = Integer.parseInt(input.substring(input.length() - 1));
     String inputLastNumber = input.substring(input.length() - 1);
-    int calcLastNumber = 0;
     if(input.length() == 12) {
-      input = input.substring(2); // remove first two
+      input = input.substring(2); // remove first two from year
     }
     input = input.substring(0, input.length()-1);
+    int total = 0;
+    for (int i = 0; i < input.length(); i++) {
+      if(i % 2 == 0 && Character.getNumericValue(input.charAt(i)) * 2 >= 10) {
 
-    System.out.println(input);
-    System.out.println(inputLastNumber);
+        int splitIt = Character.getNumericValue(input.charAt(i)) * 2;
+        int firstInt = splitIt / 10;
+        int secondInt = splitIt % 10;
+        total = total + firstInt + secondInt;
+      } else if (i % 2 == 0) {
+        total = total + Character.getNumericValue(input.charAt(i)) * 2;
+      } else {
+        total = total + Character.getNumericValue(input.charAt(i)) * 1;
+      }
+    }
+    int calculatedControlNumber = 10 - (total % 10);
+    int controlNumberFromInput = Integer.parseInt(inputLastNumber);
 
-    return true;
+    if (calculatedControlNumber == controlNumberFromInput) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
    public static void main(String[] args) {
