@@ -1,40 +1,12 @@
-// https://docs.oracle.com/javase/8/docs/api/java/time/package-summary.html#package.description
 import java.time.LocalDate;
 import java.time.DateTimeException;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
-/*
-Kontrollsiffran
-Sista siffran i personnumret är en kontrollsiffra. Den räknas ut maskinellt med ledning av födelsetiden och födelsenumret.
-
-Här följer ett exempel på hur man kan räkna fram kontrollsiffran (enligt den s.k. modulus-10-metoden med vikterna 1 och 2):
-
-1. Siffrorna i födelsetiden och födelsenumret multipliceras växelvis med 2 och 1.
-
-640823-3234
-6 4 0 8 2 3 – 3 2 3
-2 1 2 1 2 1    2 1 2
-12,4,0,8,4,3, 6,2,6
-
-8 5 0 3 1 1 - 0 1 5
-2 1 2 1 2 1   2 1 2
-16,5,0,3,2,1,0,1,10 = 38
-
-8 4 1 1 2 0 - 1 4 2 2
-2 1 2 1 2 1   2 1 2
-
-
-
-
-2. Lägg ihop siffrorna i produkterna. Obs! 12 räknas som 1+2
-1+2+4+0+8+4+3+6+2+6=36
-
-3. Entalssiffran (6) i siffersumman dras från talet 10. 10-6=4.
-
-Restsiffran (4) blir kontrollsiffra vilket gör att personnumret i exemplet blir 640823-3234.
-Är restsiffran 10, blir kontrollsiffran 0.
-*/
+import java.util.Calendar;
+import java.util.Date;
 
  public class Personnummer {
 
@@ -42,7 +14,6 @@ Restsiffran (4) blir kontrollsiffra vilket gör att personnumret i exemplet blir
      boolean isOnlyDigits = true;
      for(int i = 0; i < date.length(); i++) {
        if (!Character.isDigit(date.charAt(i))) {
-         //System.out.println("Found a nondigit!");
          isOnlyDigits = false;
        }
      }
@@ -57,15 +28,33 @@ Restsiffran (4) blir kontrollsiffra vilket gör att personnumret i exemplet blir
      }
    }
 
-   public static boolean isDateValid(int year, int month, int day) {
-    boolean dateIsValid = true;
-    try {
-        LocalDate.of(year, month, day);
-    } catch (DateTimeException e) {
-        dateIsValid = false;
+   public static boolean isValidDate(String date) {
+    SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+    if(date.length() == 6) {
+      df = new SimpleDateFormat("yyMMdd");
     }
-    return dateIsValid;
+    try {
+        df.parse(date);
+        return true;
+    } catch (ParseException e) {
+        return false;
+    }
 }
+    public static boolean isFromFutureDate(String date) {
+      return false;
+    }
+
+//    public static boolean isDateValidAndNotFromFuture(String date) {
+//     boolean dateIsValid = true;
+//     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyddMM");
+//     LocalDate dateTime = LocalDate.parse(date, formatter);
+//     try {
+//         LocalDate.of(dateTime);
+//     } catch (DateTimeException e) {
+//         dateIsValid = false;
+//     }
+//     return dateIsValid;
+// }
 
   public static String isMaleOrFemale(String input) {
      int lastNumber = input.charAt(input.length()-1);
@@ -77,7 +66,6 @@ Restsiffran (4) blir kontrollsiffra vilket gör att personnumret i exemplet blir
     }
 
   public static boolean isControlNumberValid(String input) {
-    //int inputLastNumber = Integer.parseInt(input.substring(input.length() - 1));
     String inputLastNumber = input.substring(input.length() - 1);
     if(input.length() == 12) {
       input = input.substring(2); // remove first two from year
@@ -111,34 +99,19 @@ Restsiffran (4) blir kontrollsiffra vilket gör att personnumret i exemplet blir
 while(true){
      String input = "";
      System.out.println("Skriv in ett personnummer...");
+     System.out.println("Format: yyyymmdd-xxxx, yymmdd-xxxx med eller utan bindestreck (-)");
      Scanner keyboard = new Scanner(System. in );
      input = keyboard.next().trim().replaceAll("-", "").toUpperCase();
      String date = input.substring(0, input.length() - 4);
 
-     System.out.println("dateIs:"+date);
-     System.out.println("isLengthValid:"+isLengthValid(input));
-     System.out.println("isDigits:"+isDigits(input));
-     System.out.println("isMaleOrFemale:"+isMaleOrFemale(input));
-     System.out.println("isControlNumberValid:"+isControlNumberValid(input));
-
-     // Exempel på inmatning 850311-1234, 8503111234 eller 198503111234, 19850311-1234
-     // Datum delen av personnummret ska alltid formateras till: 850311
-     // År kan vara 1899.
-     // Kontrollera längden på datum del av input, 19850311 = 8, 850311 = 6, därefter ta bort två första tecken om datum del är 8.
-
-     //Kontrollera att födelsedatumet inte är ifrån framtiden
-
-     //Existerar datumet
-
-     //Validera kontrollsiffran
-
-    //  DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-    //  String formatter = dateTimeFormatter.format();
-    //  System.out.println("DateTimeFormatter : " + formatter);
+    System.out.println("dateIs:"+date);
+    System.out.println("isLengthValid:"+isLengthValid(input));
+    System.out.println("isDigits:"+isDigits(input));
+    System.out.println("isMaleOrFemale:"+isMaleOrFemale(input));
+    System.out.println("isControlNumberValid:"+isControlNumberValid(input));
+    System.out.println("isValidDate:"+isValidDate(date));
 
 
-
-     //System.out.println(isDateValid(2001,01,01));
 }
    }
 
