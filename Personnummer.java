@@ -1,5 +1,6 @@
 import java.time.LocalDate;
 import java.time.DateTimeException;
+import java.time.format.DateTimeParseException;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
@@ -28,40 +29,27 @@ import java.util.Date;
      }
    }
 
-   public static boolean isValidDate(String date) {
-    SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
-    if(date.length() == 6) {
-      df = new SimpleDateFormat("yyMMdd");
-    }
-    try {
-        df.parse(date);
-        return true;
-    } catch (ParseException e) {
-        return false;
-    }
-}
-    public static boolean isFromFutureDate(String date) {
+    public static boolean isValidDate(String date) {
+      try {
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
       if(date.length() == 6) {
         formatter = DateTimeFormatter.ofPattern("yyMMdd");
       }
-
       LocalDate today = LocalDate.now();
-      System.out.println(today.format(formatter));
-
+      String text = today.format(formatter);
+      LocalDate parsedDate = LocalDate.parse(text, formatter);
       LocalDate inputDate = LocalDate.parse(date, formatter);
-      System.out.println(inputDate.format(formatter));
 
-      if(inputDate.isAfter(today)){
-        System.out.println("Future date!");
+      System.out.println("parsedDate:"+parsedDate);
+      System.out.println("inputDate:"+inputDate);
+
+      if(parsedDate.isAfter(inputDate)){
+         return true;
       }
-
-
-      //String text = today.format(formatter);
-      //LocalDate parsedDate = LocalDate.parse(text, formatter);
-      //"PARSED DATE:"+parsedDate);
-
       return false;
+    } catch (DateTimeParseException e) {
+      return false;
+    }
     }
 
   public static String isMaleOrFemale(String input) {
@@ -113,6 +101,7 @@ import java.util.Date;
      System.out.println("Skriv in ett personnummer.");
      System.out.println("Format: yyyymmdd-xxxx, yymmdd-xxxx med eller utan bindestreck (-)");
      System.out.println("Q för att avsluta programmet...");
+     System.out.println("---------------------------------------");
      Scanner keyboard = new Scanner(System. in );
      input = keyboard.next().trim().replaceAll("-", "").toUpperCase();
      if(input.equals("Q")){
@@ -120,7 +109,7 @@ import java.util.Date;
        break;
      }
      String date = input.substring(0, input.length() - 4);
-     isFromFutureDate(date);
+     //isValidDate2(date);
     if(!isLengthValid(input)) {
       System.out.println("Längden på det inmatade personnummret är fel, försök igen...");
       break;
@@ -129,20 +118,17 @@ import java.util.Date;
       System.out.println("Det finns bokstäver i personnummret, försök igen...");
       break;
     }
+    if(!isValidDate(date)) {
+      System.out.println("Datumet du angav är inte korrekt, försök igen...");
+      break;
+    }
     if(!isControlNumberValid(input)) {
       System.out.println("Kontrollnummret är inte korrekt, försök igen...");
       break;
     }
-    //String date = input.substring(0, input.length() - 4);
-    //System.out.println("isLengthValid:"+isLengthValid(input));
-    //System.out.println("dateIs:"+date);
-    //System.out.println("isDigits:"+isDigits(input));
-    //System.out.println("isMaleOrFemale:"+isMaleOrFemale(input));
-    //System.out.println("isControlNumberValid:"+isControlNumberValid(input));
-    //System.out.println("isValidDate:"+isValidDate(date));
-    //isFromFutureDate(date);
+
     //Validate all and give answer if its a correct Personnummer
-    if(isLengthValid(input) && isDigits(input) && isControlNumberValid(input)){
+    if(isLengthValid(input) && isDigits(input) && isControlNumberValid(input) && isValidDate(date)){
       System.out.println(input+" "+"är ett korrekt personnummer.");
     }
 
