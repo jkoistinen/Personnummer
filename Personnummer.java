@@ -34,9 +34,6 @@ public class Personnummer {
 			LocalDate todayDate = LocalDate.parse(text, formatter);
 			LocalDate inputDate = LocalDate.parse(date, formatter);
 
-			//System.out.println("todayDate:"+todayDate);
-			//System.out.println("inputDate:"+inputDate);
-
 			//checks that date is not in the future
 			if (todayDate.isAfter(inputDate)) {
 				return true;
