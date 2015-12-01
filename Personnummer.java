@@ -1,8 +1,5 @@
 import java.time.LocalDate;
-//import java.time.DateTimeException;
 import java.time.format.DateTimeParseException;
-//import java.text.SimpleDateFormat;
-//import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
@@ -111,7 +108,6 @@ import java.util.Date;
        break;
      }
      String date = input.substring(0, input.length() - 4);
-     //isValidDate2(date);
     if(!isLengthValid(input)) {
       System.out.println("Längden på det inmatade personnummret är fel, försök igen...");
       break;
