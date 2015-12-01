@@ -1,8 +1,8 @@
 import java.time.LocalDate;
-import java.time.DateTimeException;
+//import java.time.DateTimeException;
 import java.time.format.DateTimeParseException;
-import java.text.SimpleDateFormat;
-import java.text.ParseException;
+//import java.text.SimpleDateFormat;
+//import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
@@ -33,21 +33,23 @@ import java.util.Date;
       try {
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
       if(date.length() == 6) {
-        formatter = DateTimeFormatter.ofPattern("yyMMdd");
+        formatter = DateTimeFormatter.ofPattern("YYMMdd");
       }
       LocalDate today = LocalDate.now();
       String text = today.format(formatter);
-      LocalDate parsedDate = LocalDate.parse(text, formatter);
+      LocalDate todayDate = LocalDate.parse(text, formatter);
       LocalDate inputDate = LocalDate.parse(date, formatter);
 
-      System.out.println("parsedDate:"+parsedDate);
+      System.out.println("todayDate:"+todayDate);
       System.out.println("inputDate:"+inputDate);
 
-      if(parsedDate.isAfter(inputDate)){
+      //checks that date is not in the future
+      if(todayDate.isAfter(inputDate)){
          return true;
       }
       return false;
     } catch (DateTimeParseException e) {
+      System.out.println("EXCEPTION!");
       return false;
     }
     }
