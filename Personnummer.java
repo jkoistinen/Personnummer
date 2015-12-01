@@ -27,7 +27,7 @@ public class Personnummer {
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 			if (date.length() == 6) {
-				formatter = DateTimeFormatter.ofPattern("YYMMdd");
+				formatter = DateTimeFormatter.ofPattern("yMMdd");
 			}
 			LocalDate today = LocalDate.now();
 			String text = today.format(formatter);
@@ -43,7 +43,6 @@ public class Personnummer {
 			}
 			return false;
 		} catch (DateTimeParseException e) {
-			System.out.println("EXCEPTION! Testa med yyyymmdd-xxxx eller yyyymmddxxxx");
 			return false;
 		}
 	}
