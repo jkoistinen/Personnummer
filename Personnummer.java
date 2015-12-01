@@ -3,9 +3,6 @@ import java.time.format.DateTimeParseException;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
-import java.util.Calendar;
-import java.util.Date;
-
  public class Personnummer {
 
    public static boolean isDigits(String date) {
@@ -37,8 +34,8 @@ import java.util.Date;
       LocalDate todayDate = LocalDate.parse(text, formatter);
       LocalDate inputDate = LocalDate.parse(date, formatter);
 
-      System.out.println("todayDate:"+todayDate);
-      System.out.println("inputDate:"+inputDate);
+      //System.out.println("todayDate:"+todayDate);
+      //System.out.println("inputDate:"+inputDate);
 
       //checks that date is not in the future
       if(todayDate.isAfter(inputDate)){
@@ -46,7 +43,7 @@ import java.util.Date;
       }
       return false;
     } catch (DateTimeParseException e) {
-      System.out.println("EXCEPTION!");
+      System.out.println("EXCEPTION! Testa med yyyymmdd-xxxx eller yyyymmddxxxx");
       return false;
     }
     }
